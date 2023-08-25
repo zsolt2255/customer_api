@@ -58,9 +58,7 @@ class ClientGateway
     public function store(array $data): mixed
     {
         return $this->sendHttpPost('/api/users', [
-            'headers' => [
-                'Content-Type' => 'application/json',
-            ] + request()->headers->all(),
+            'headers' => request()->headers->all(),
             'body' => json_encode($data),
         ]);
     }
