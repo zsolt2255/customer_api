@@ -61,7 +61,10 @@ $app->singleton(
 
 $app->configure('app');
 $app->configure('database');
+
 $app->withEloquent();
+$app->withFacades();
+
 $app->register(\Anik\Form\FormRequestServiceProvider::class);
 $app->register(\App\Providers\RepositoryServiceProvider::class);
 
@@ -85,7 +88,7 @@ $app->register(\App\Providers\RepositoryServiceProvider::class);
 // ]);
 
  $app->routeMiddleware([
-     'auth' => \App\Http\Middleware\Authenticate::class
+     'auth' => \App\Http\Middleware\Authenticate::class,
  ]);
 
 /*

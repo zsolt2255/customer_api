@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->timestamp('contract_date');
+            $table->timestamp('contract_date')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
