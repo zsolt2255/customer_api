@@ -1,0 +1,83 @@
+version: '3'
+services:
+    # App
+    app:
+        container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_app
+        restart: always
+        build:
+            context: ./
+        volumes:
+            - ./:/var/www
+        ports:
+            - "8000:8000"
+        networks:
+            - default
+
+    # DatabaseAPI
+    database_api:
+        container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_database_api
+        restart: always
+        build:
+            context: ./packages/DatabaseAPI
+        volumes:
+            - ./packages/DatabaseAPI/:/var/www
+        depends_on:
+            - mysql
+        ports:
+            - "9000:9000"
+        networks:
+            - default
+
+    # Proxy
+    proxy:
+        container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_proxy
+        restart: always
+        build:
+            context: ./proxy
+        volumes:
+            - ./proxy:/usr/src/app
+        depends_on:
+            - mysql
+        ports:
+            - "3000:3000"
+        extra_hosts:
+            - "host.docker.internal:172.17.0.1"
+        networks:
+            - default
+
+    # MySQL
+    mysql:
+        container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_mysql
+        image: mysql:5.7
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+        volumes:
+            - ./docker/mysql/data:/var/lib/mysql/
+        ports:
+            - "3306:3306"
+        networks:
+            - default
+
+    # PHPMyAdmin
+    phpmyadmin:
+        container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_phpmyadmin
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        environment:
+            - PMA_PORT=3306
+            - PMA_HOST=mysql
+            - UPLOAD_LIMIT=3000M
+        depends_on:
+            - mysql
+        ports:
+            - "50000:80"
+        networks:
+            - default
+
+networks:
+    default:
+        driver: bridge
+        external: false
