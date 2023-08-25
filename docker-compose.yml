@@ -48,7 +48,8 @@ services:
     # MySQL
     mysql:
         container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_mysql
-        image: mysql:5.7
+        image: mysql:8.0
+        command: --max_connections=5
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
@@ -56,6 +57,7 @@ services:
             MYSQL_PASSWORD: ${DB_PASSWORD}
         volumes:
             - ./docker/mysql/data:/var/lib/mysql/
+            - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
         ports:
             - "3306:3306"
         networks:
