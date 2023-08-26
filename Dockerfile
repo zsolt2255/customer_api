@@ -11,5 +11,9 @@ COPY composer.json composer.lock /var/www/
 RUN composer install --no-autoloader --no-scripts
 
 COPY . /var/www
+COPY .env.example .env
+
+RUN php artisan key:generate
+RUN php artisan optimize
 
 CMD ["php", "artisan", "serve", "--host=0.0.0.0"]
