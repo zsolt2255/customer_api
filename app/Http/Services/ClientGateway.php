@@ -21,7 +21,7 @@ class ClientGateway
     public function __construct()
     {
         $this->httpClient = new Client([
-            'base_uri' => 'http://database_api:9000',
+            'base_uri' => config('database_api.url'),
             'timeout'  => 10,
             'http_errors' => false,
         ]);

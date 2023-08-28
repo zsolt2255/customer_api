@@ -38,18 +38,10 @@ class UserService
 
         if (is_array($firstElement)) {
             foreach ($data as $item) {
-                $user = $this->saveUser($item);
-
-                $this->attachAddresses($item['addresses'], $user);
-
-                $response[] = $user;
+                $response[] = $this->storeAddressUser($item);
             }
         } else {
-            $user = $this->saveUser($data);
-
-            $this->attachAddresses($data['addresses'], $user);
-
-            $response[] = $user;
+            $response[] = $this->storeAddressUser($data);
         }
 
         return $response;
@@ -85,6 +77,19 @@ class UserService
 
             $user->addresses()->attach($addressModel->id);
         }
+    }
+
+    /**
+     * @param array $data
+     * @return Model
+     */
+    private function storeAddressUser(array $data): Model
+    {
+        $user = $this->saveUser($data);
+
+        $this->attachAddresses($data['addresses'], $user);
+
+        return $user;
     }
 
     /**

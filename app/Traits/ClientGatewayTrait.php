@@ -13,6 +13,7 @@ trait ClientGatewayTrait
 {
     /**
      * @param string $uri
+     * @param array $options
      * @return mixed|string
      * @throws GuzzleException
      */
