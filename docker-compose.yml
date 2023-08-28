@@ -8,6 +8,7 @@ services:
             context: ./
         volumes:
             - ./:/var/www
+            - ./docker/app/entrypoint.sh:/scripts/entrypoint.sh
         ports:
             - "8000:8000"
         networks:
@@ -21,6 +22,7 @@ services:
             context: ./packages/DatabaseAPI
         volumes:
             - ./packages/DatabaseAPI/:/var/www
+            - ./packages/DatabaseAPI/docker/database_api/entrypoint.sh:/scripts/entrypoint.sh
         depends_on:
             - mysql
         ports:
@@ -48,8 +50,8 @@ services:
     # MySQL
     mysql:
         container_name: ${APP_ENV}_${APP_NAME_SIMPLE}_mysql
-        image: mysql:8.0
-        command: --max_connections=5
+        image: mysql:5.7
+        command: --max_connections=3
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
