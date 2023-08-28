@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
@@ -37,14 +38,14 @@ class UserService
 
         if (is_array($firstElement)) {
             foreach ($data as $item) {
-                $user = $this->userRepository->create($item);
+                $user = $this->saveUser($item);
 
                 $this->attachAddresses($item['addresses'], $user);
 
                 $response[] = $user;
             }
         } else {
-            $user = $this->userRepository->create($data);
+            $user = $this->saveUser($data);
 
             $this->attachAddresses($data['addresses'], $user);
 
@@ -84,6 +85,19 @@ class UserService
 
             $user->addresses()->attach($addressModel->id);
         }
+    }
+
+    /**
+     * @param array $data
+     * @return Model
+     */
+    private function saveUser(array $data): Model
+    {
+        $data['password'] = Hash::make($data['password'], [
+            'rounds' => 12,
+        ]);
+
+        return $this->userRepository->create($data);
     }
 
     public function index(): Collection|array
