@@ -88,7 +88,7 @@ trait ClientGatewayTrait
      */
     private function checkAuthentication($responseData): void
     {
-        if (is_array($responseData) && isset($responseData['auth'])) {
+        if (is_array($responseData) && (isset($responseData['auth']) || isset($responseData['success'])) ) {
             throw new AuthenticationException('Unauthorized');
         }
     }

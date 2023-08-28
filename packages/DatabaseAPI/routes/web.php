@@ -17,7 +17,7 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
-$router->group(['middleware' => 'auth', 'prefix' => 'api/users'], function () use ($router) {
+$router->group(['middleware' => ['auth', 'database.connection'], 'prefix' => 'api/users'], function () use ($router) {
     $router->get('/', 'UserController@index');
     $router->get('{user}', 'UserController@show');
     $router->post('/', 'UserController@store');

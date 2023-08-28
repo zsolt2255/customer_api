@@ -89,6 +89,7 @@ $app->register(\App\Providers\RepositoryServiceProvider::class);
 
  $app->routeMiddleware([
      'auth' => \App\Http\Middleware\Authenticate::class,
+     'database.connection' => \App\Http\Middleware\DatabaseConnection::class,
  ]);
 
 /*
